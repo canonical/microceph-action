@@ -1,0 +1,7 @@
+frontend https_microceph_frontend
+      mode http
+      bind *:443 ssl crt  /etc/ssl/microceph.crt alpn h2,http/1.1  ssl-min-ver TLSv1.2
+      default_backend   http_microceph
+
+backend http_microceph
+      mode http

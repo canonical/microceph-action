@@ -1,0 +1,41 @@
+name: 'microceph-s3'
+description: 'Sets a single-node s3 server with microceph and self-signed certificate'
+inputs:
+  channel:
+    description: 'Microceph snap channel'
+    default: 'latest/edge'
+  devname:
+    description: 'Microceph device name'
+    default: '/dev/sdi'
+  accesskey:
+    description: 'Microceph S3 access key'
+    default: 'accesskey'
+  secretkey:
+    description: 'Microceph S3 secret key'
+    default: 'secretkey'
+  bucket:
+    description: 'Microceph bucket path'
+    default: 's3://testbucket'
+outputs:
+  s3config:
+    description: |
+      Returns the file path containing the details of the server, formatted as:
+        export S3_SERVER_URL=https://<IP>
+        export S3_ACCESS_KEY=...
+        export S3_SECRET_KEY=...
+        export S3_BUCKET=...
+        export S3_CA_BUNDLE_PATH=<path>
+      source the file to use the server.
+    value: ${{ steps.microceph-config.outputs.s3-config-file }}
+runs:
+  using: "composite"
+  steps:
+    - id: microceph-config
+      run: microceph.sh -c ${{ inputs.channel }} -d ${{ inputs.devname }} -a ${{ inputs.accesskey }} -s ${{ inputs.secretkey }} -b ${{ inputs.bucket }}
+      shell: bash
+    - id: https-setup
+      run: https.sh
+      shell: bash
+    - id: microceph-output
+      run: echo "s3-config-file=$(pwd)/microceph.source" >> $GITHUB_OUTPUT
+      shell: bash
