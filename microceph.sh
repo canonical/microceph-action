@@ -41,8 +41,9 @@ function check_ceph_ok_or_exit () {
         if sudo microceph.ceph status | grep HEALTH_OK; then
             break
         else
+            sudo microceph.ceph status
             sleep 30
-            sudo ceph health detail
+            sudo microceph.ceph health detail
         fi
     done
     if [ "$i" -eq 5 ]; then
@@ -65,9 +66,10 @@ sudo snap restart microceph.daemon
 
 sudo microceph cluster bootstrap
 
-# Set mon warn threshold to slightly more than mon_data_avail_crit
-sudo microceph.ceph config set mon.* mon_data_avail_warn 6
 sleep 30s
+
+# Set mon warn threshold to slightly more than mon_data_avail_crit
+sudo microceph.ceph config set "mon.$(hostname)" mon_data_avail_warn 6
 
 for l in a b c; do
   loop_file="$(sudo mktemp -p /mnt XXXX.img)"
