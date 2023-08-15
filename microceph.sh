@@ -11,7 +11,7 @@ SECRET_KEY=secret_key
 BUCKET_NAME=s3://testbucket
 
 function parse_args () {
-    while getopts ":s:p:" o; do
+    while getopts ":c:d:a:s:b:" o; do
         case "${o}" in
             c)
                 CHANNEL=${OPTARG}
@@ -72,10 +72,8 @@ sudo microceph.radosgw-admin key create --uid=test --key-type=s3 --access-key "$
 s3cmd --host localhost --host-bucket="localhost/%(bucket)" --access_key="${ACCESS_KEY}" --secret_key="${SECRET_KEY}" --no-ssl mb "${BUCKET_NAME}"
 
 OUTPUT="$(pwd)"/microceph.source
-rm ${OUTPUT}
-touch ${OUTPUT}
-echo "S3_ACCESS_KEY=${ACCESS_KEY}" >> ${OUTPUT}
-echo "S3_SECRET_KEY=${SECRET_KEY}" >> ${OUTPUT}
-echo "S3_BUCKET=${BUCKET_NAME}"    >> ${OUTPUT}
+echo "S3_ACCESS_KEY=${ACCESS_KEY}" > "${OUTPUT}"
+echo "S3_SECRET_KEY=${SECRET_KEY}" >> "${OUTPUT}"
+echo "S3_BUCKET=${BUCKET_NAME}"    >> "${OUTPUT}"
 
 set +e

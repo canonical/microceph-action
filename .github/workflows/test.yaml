@@ -1,0 +1,31 @@
+name: Test Microceph Action
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  linting:
+    runs-on: ubuntu-latest
+    name: Linting
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Lint
+        run: |
+          apt install -qq -y python3 python3-yaml
+          shellcheck *.sh
+          python3 -c "import yaml; yaml.safe_load(open('action.yml').read())"
+
+  testing:
+    runs-on: ubuntu-latest
+    name: Testing
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Microceph setup
+        uses: ./action.yml
