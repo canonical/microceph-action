@@ -17,22 +17,8 @@ sudo openssl req \
     -days 365 \
     -newkey rsa:4096 \
     -subj "/CN=${IP}/O=microceph" \
-    -keyout "/etc/ssl/${CA}.key" \
+    -keyout "${CA}.key" \
     -out "${CA}"
-#openssl req \
-#    -out /tmp/cert.csr \
-#    -newkey rsa:4096 -nodes \
-#    -keyout "/etc/ssl/microceph.key" \
-#    -subj "/CN=${IP}/O=microceph" \
-#    -addext "subjectAltName=IP:${IP}"
-#openssl x509 -req -sha256 \
-#    -extfile <(printf "subjectAltName=IP:${IP}") \
-#    -days 365 \
-#    -CA example.com.crt \
-#    -CAkey example.com.key \
-#    -set_serial 0 \
-#    -in /tmp/cert.csr \
-#    -out "/etc/ssl/microceph.crt"
 
 OUTPUT=$(pwd)/microceph.source
 echo "S3_SERVER_URL=https://${IP}" >> "${OUTPUT}"
