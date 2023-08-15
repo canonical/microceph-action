@@ -41,7 +41,8 @@ function check_ceph_ok_or_exit () {
         if sudo microceph.ceph status | grep HEALTH_OK; then
             break
         else
-            sleep 15
+            sudo microceph.ceph status
+            sleep 30
         fi
     done
     if [ "$i" -eq 5 ]; then
@@ -75,25 +76,10 @@ for l in a b c; do
 done
 
 check_ceph_ok_or_exit
-sudo microceph.ceph status
 
 
 sudo microceph enable rgw
 sleep 15s
-
-
-i=0
-for i in {1..5}; do
-    if microceph.ceph status | grep HEALTH_OK; then
-        break
-    else
-        sleep 15
-    fi
-done
-if [ "$i" -eq 5 ]; then
-    exit 1
-fi
-
 
 sudo microceph.radosgw-admin user create --uid=test --display-name=test
 sudo microceph.radosgw-admin key create --uid=test --key-type=s3 --access-key "${ACCESS_KEY}" --secret-key "${SECRET_KEY}"
