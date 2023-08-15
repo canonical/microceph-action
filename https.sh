@@ -18,6 +18,7 @@ sudo openssl req \
     -newkey rsa:4096 \
     -subj "/CN=${IP}/O=microceph" \
     -keyout "${CA}.key" \
+    -addext "subjectAltName = IP:${IP}" \
     -out "${CA}"
 
 sudo systemctl restart haproxy
