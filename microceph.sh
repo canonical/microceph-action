@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-set -e
+set -eux
 
 usage() { echo "Usage: $0 [-c <snap-channel>] [-d <device-name>] [-a <access-key>] [-s <secret-key>] [-b <bucket-name>]" 1>&2; exit 1; }
 
@@ -35,6 +35,22 @@ function parse_args () {
     done
 }
 
+function check_ceph_ok_or_exit () {
+    i=0
+    for i in {1..5}; do
+        if sudo microceph.ceph status | grep HEALTH_OK; then
+            break
+        else
+            sleep 15
+        fi
+    done
+    if [ "$i" -eq 5 ]; then
+        exit 1
+    fi
+}
+
+
+
 parse_args
 
 sudo apt-get -qq -y update
@@ -58,7 +74,7 @@ for l in a b c; do
   sudo microceph disk add --wipe "${DEVNAME}${l}"
 done
 
-
+check_ceph_ok_or_exit
 sudo microceph.ceph status
 
 
@@ -66,10 +82,25 @@ sudo microceph enable rgw
 sleep 15s
 
 
+i=0
+for i in {1..5}; do
+    if microceph.ceph status | grep HEALTH_OK; then
+        break
+    else
+        sleep 15
+    fi
+done
+if [ "$i" -eq 5 ]; then
+    exit 1
+fi
+
+
 sudo microceph.radosgw-admin user create --uid=test --display-name=test
 sudo microceph.radosgw-admin key create --uid=test --key-type=s3 --access-key "${ACCESS_KEY}" --secret-key "${SECRET_KEY}"
 
 s3cmd --host localhost --host-bucket="localhost/%(bucket)" --access_key="${ACCESS_KEY}" --secret_key="${SECRET_KEY}" --no-ssl mb "${BUCKET_NAME}"
+
+check_ceph_ok_or_exit
 
 OUTPUT="$(pwd)"/microceph.source
 echo "S3_ACCESS_KEY=${ACCESS_KEY}" > "${OUTPUT}"
