@@ -64,6 +64,9 @@ sudo snap connect microceph:block-devices
 sudo snap restart microceph.daemon
 
 sudo microceph cluster bootstrap
+
+# Set mon warn threshold to slightly more than mon_data_avail_crit
+sudo microceph.ceph config set mon.* mon_data_avail_warn 6
 sleep 30s
 
 for l in a b c; do
