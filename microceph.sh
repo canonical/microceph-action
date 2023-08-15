@@ -41,8 +41,8 @@ function check_ceph_ok_or_exit () {
         if sudo microceph.ceph status | grep HEALTH_OK; then
             break
         else
-            sudo microceph.ceph status
             sleep 30
+            sudo ceph health detail
         fi
     done
     if [ "$i" -eq 5 ]; then
