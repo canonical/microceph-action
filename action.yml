@@ -9,10 +9,10 @@ inputs:
     default: '/dev/sdi'
   accesskey:
     description: 'Microceph S3 access key'
-    default: 'accesskey'
+    default: 'access_key'
   secretkey:
     description: 'Microceph S3 secret key'
-    default: 'secretkey'
+    default: 'secret_key'
   bucket:
     description: 'Microceph bucket path'
     default: 's3://testbucket'

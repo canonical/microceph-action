@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-set -eux
+set -e
 
 sudo apt install -qq -y haproxy
 
@@ -19,6 +19,8 @@ sudo openssl req \
     -subj "/CN=${IP}/O=microceph" \
     -keyout "${CA}.key" \
     -out "${CA}"
+
+sudo systemctl restart haproxy
 
 OUTPUT=$(pwd)/microceph.source
 echo "S3_SERVER_URL=https://${IP}" >> "${OUTPUT}"
