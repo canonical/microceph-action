@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-set -e
+set -eux
 
 usage() { echo "Usage: $0 [-c <snap-channel>] [-d <device-name>] [-a <access-key>] [-s <secret-key>] [-b <bucket-name>]" 1>&2; exit 1; }
 
