@@ -30,6 +30,7 @@ Use the environment variables above for the next steps, for example:
 
 ```
 $ s3cmd [--no-check-certificate] --host "${S3_SERVER_URL}" \
+        --host-bucket="${S3_SERVER_URL}/%(bucket)" \
         --access_key="${S3_ACCESS_KEY}" \
         --ca-cert="${S3_CA_BUNDLE_PATH}" \
         --secret_key="${S3_SECRET_KEY}" ls
