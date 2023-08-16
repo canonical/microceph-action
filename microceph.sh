@@ -41,7 +41,9 @@ function check_ceph_ok_or_exit () {
         if sudo microceph.ceph status | grep HEALTH_OK; then
             break
         else
-            sleep 15
+            sudo microceph.ceph status
+            sleep 30
+            sudo microceph.ceph health detail
         fi
     done
     if [ "$i" -eq 5 ]; then
@@ -63,7 +65,11 @@ sudo snap connect microceph:block-devices
 sudo snap restart microceph.daemon
 
 sudo microceph cluster bootstrap
+
 sleep 30s
+
+# Set mon warn threshold to slightly more than mon_data_avail_crit
+sudo microceph.ceph config set "mon.$(hostname)" mon_data_avail_warn 6
 
 for l in a b c; do
   loop_file="$(sudo mktemp -p /mnt XXXX.img)"
@@ -75,30 +81,18 @@ for l in a b c; do
 done
 
 check_ceph_ok_or_exit
-sudo microceph.ceph status
 
 
 sudo microceph enable rgw
 sleep 15s
 
-
-i=0
-for i in {1..5}; do
-    if microceph.ceph status | grep HEALTH_OK; then
-        break
-    else
-        sleep 15
-    fi
-done
-if [ "$i" -eq 5 ]; then
-    exit 1
-fi
-
-
 sudo microceph.radosgw-admin user create --uid=test --display-name=test
 sudo microceph.radosgw-admin key create --uid=test --key-type=s3 --access-key "${ACCESS_KEY}" --secret-key "${SECRET_KEY}"
 
-s3cmd --host localhost --host-bucket="localhost/%(bucket)" --access_key="${ACCESS_KEY}" --secret_key="${SECRET_KEY}" --no-ssl mb "${BUCKET_NAME}"
+s3cmd --host localhost \
+      --host-bucket="localhost/%(bucket)" \
+      --access_key="${ACCESS_KEY}" \
+      --secret_key="${SECRET_KEY}" --no-ssl mb "${BUCKET_NAME}"
 
 check_ceph_ok_or_exit
 
