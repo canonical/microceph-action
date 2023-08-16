@@ -29,7 +29,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: Microceph setup
-        uses: phvalguima/microceph-action@v0.1
+        uses: phvalguima/microceph-action@v0.0.1
       - name: Verify S3 is accessible
         run: |
           # Check microceph and haproxy are set
@@ -37,22 +37,22 @@ jobs:
           sudo microceph.ceph status
           source microceph.source
           curl -XGET --cacert "${S3_CA_BUNDLE_PATH}" "${S3_SERVER_URL}"
-          s3cmd --host "${S3_SERVER_URL}" \
+          s3cmd --no-check-certificate --host "${S3_SERVER_URL}" \
                 --access_key="${S3_ACCESS_KEY}" \
                 --ca-cert="${S3_CA_BUNDLE_PATH}" \
                 --secret_key="${S3_SECRET_KEY}" ls
           dd if=/dev/urandom of=testing bs=64M count=4
-          INPUT="$(md5sum testing)"
-          s3cmd --host "${S3_SERVER_URL}" \
+          INPUT="$(md5sum testing | awk '{print $1}')"
+          s3cmd --no-check-certificate --host "${S3_SERVER_URL}" \
                 --access_key="${S3_ACCESS_KEY}" \
                 --ca-cert="${S3_CA_BUNDLE_PATH}" \
                 --secret_key="${S3_SECRET_KEY}" \
                 put testing "${S3_BUCKET}"/testing
-          s3cmd --host "${S3_SERVER_URL}" \
+          s3cmd --no-check-certificate --host "${S3_SERVER_URL}" \
                 --access_key="${S3_ACCESS_KEY}" \
                 --ca-cert="${S3_CA_BUNDLE_PATH}" \
                 --secret_key="${S3_SECRET_KEY}" \
                 get "${S3_BUCKET}"/testing result-testing
-          if [[ "${INPUT}" != "$(sudo md5sum result-testing)" ]]; then
+          if [[ "${INPUT}" != "$(md5sum result-testing | awk '{print $1}')" ]]; then
               exit 1
           fi
