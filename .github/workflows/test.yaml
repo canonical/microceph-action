@@ -36,19 +36,21 @@ jobs:
           set -eux
           sudo microceph.ceph status
           source microceph.source
-          curl -XGET --cacert "${S3_CA_BUNDLE_PATH}" "${S3_SERVER_URL}"
           s3cmd --no-check-certificate --host "${S3_SERVER_URL}" \
+                --host-bucket="${S3_SERVER_URL}/%(bucket)" \
                 --access_key="${S3_ACCESS_KEY}" \
                 --ca-cert="${S3_CA_BUNDLE_PATH}" \
                 --secret_key="${S3_SECRET_KEY}" ls
           dd if=/dev/urandom of=testing bs=64M count=4
           INPUT="$(md5sum testing | awk '{print $1}')"
           s3cmd --no-check-certificate --host "${S3_SERVER_URL}" \
+                --host-bucket="${S3_SERVER_URL}/%(bucket)" \
                 --access_key="${S3_ACCESS_KEY}" \
                 --ca-cert="${S3_CA_BUNDLE_PATH}" \
                 --secret_key="${S3_SECRET_KEY}" \
                 put testing "${S3_BUCKET}"/testing
           s3cmd --no-check-certificate --host "${S3_SERVER_URL}" \
+                --host-bucket="${S3_SERVER_URL}/%(bucket)" \
                 --access_key="${S3_ACCESS_KEY}" \
                 --ca-cert="${S3_CA_BUNDLE_PATH}" \
                 --secret_key="${S3_SECRET_KEY}" \

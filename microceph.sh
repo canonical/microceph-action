@@ -89,7 +89,10 @@ sleep 15s
 sudo microceph.radosgw-admin user create --uid=test --display-name=test
 sudo microceph.radosgw-admin key create --uid=test --key-type=s3 --access-key "${ACCESS_KEY}" --secret-key "${SECRET_KEY}"
 
-s3cmd --host localhost --host-bucket="localhost/%(bucket)" --access_key="${ACCESS_KEY}" --secret_key="${SECRET_KEY}" --no-ssl mb "${BUCKET_NAME}"
+s3cmd --host localhost \
+      --host-bucket="localhost/%(bucket)" \
+      --access_key="${ACCESS_KEY}" \
+      --secret_key="${SECRET_KEY}" --no-ssl mb "${BUCKET_NAME}"
 
 check_ceph_ok_or_exit
 
