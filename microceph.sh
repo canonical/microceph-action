@@ -98,8 +98,6 @@ check_ceph_ok_or_exit
 
 OUTPUT="$(pwd)"/microceph.source
 echo "S3_ACCESS_KEY=${ACCESS_KEY}" >  "${OUTPUT}"
-echo "S3_SECRET_KEY=${SECRET_KEY}" >> "${OUTPUT}"
-echo "S3_BUCKET=${BUCKET_NAME}"    >> "${OUTPUT}"
-echo "S3_REGION=default"           >> "${OUTPUT}"
+{ echo "S3_SECRET_KEY=${SECRET_KEY}"; echo "S3_BUCKET=${BUCKET_NAME}"; echo "S3_REGION=default"; } >> "${OUTPUT}"
 
 set +e

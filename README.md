@@ -6,7 +6,7 @@ This action sets a single-node microceph with S3 and self-signed HTTPS support f
 
 ```yaml
       - name: Setup microceph
-        uses: phvalguima/microceph-action
+        uses: phvalguima/microceph-action@v0.1
         with:
           channel: 'latest/edge'
           devname: '/dev/sdi'
@@ -23,6 +23,7 @@ S3_SERVER_URL=https://<IP>
 S3_ACCESS_KEY=...
 S3_SECRET_KEY=...
 S3_BUCKET=...
+S3_REGION=default
 S3_CA_BUNDLE_PATH=<path>
 ```
 
