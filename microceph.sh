@@ -8,7 +8,7 @@ CHANNEL=latest/edge
 DEVNAME=/dev/sdi
 ACCESS_KEY=access_key
 SECRET_KEY=secret_key
-BUCKET_NAME=s3://testbucket
+BUCKET_NAME=testbucket
 
 function parse_args () {
     while getopts ":c:d:a:s:b:" o; do
@@ -76,7 +76,7 @@ for l in a b c; do
   sudo truncate -s 1G "${loop_file}"
   loop_dev="$(sudo losetup --show -f "${loop_file}")"
   minor="${loop_dev##/dev/loop}"
-  sudo mknod -m 0660 "/dev/sdi${l}" b 7 "${minor}"
+  sudo mknod -m 0660 "${DEVNAME}${l}" b 7 "${minor}"
   sudo microceph disk add --wipe "${DEVNAME}${l}"
 done
 
