@@ -29,7 +29,9 @@ jobs:
         with:
           fetch-depth: 0
       - name: Microceph setup
-        uses: phvalguima/microceph-action@v0.1
+        uses: phvalguima/microceph-action@main
+        with:
+          osdsize: "15G"
       - name: Verify S3 is accessible
         run: |
           # Check microceph and haproxy are set

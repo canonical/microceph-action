@@ -6,13 +6,14 @@ This action sets a single-node microceph with S3 and self-signed HTTPS support f
 
 ```yaml
       - name: Setup microceph
-        uses: phvalguima/microceph-action@v0.1
+        uses: phvalguima/microceph-action@v0.2
         with:
           channel: 'latest/edge'
           devname: '/dev/sdi'
           accesskey: 'accesskey'
           secretkey: 'secretkey'
           bucket: 's3://testbucket'
+          osdsize: '20G'
 ```
 
 Once ran, microceph will generate a file with all the details, named ```microceph.source```.
