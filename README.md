@@ -12,7 +12,7 @@ This action sets a single-node microceph with S3 and self-signed HTTPS support f
           devname: '/dev/sdi'
           accesskey: 'accesskey'
           secretkey: 'secretkey'
-          bucket: 's3://testbucket'
+          bucket: 'testbucket'
           osdsize: '20G'
 ```
 
