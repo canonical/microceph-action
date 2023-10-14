@@ -35,10 +35,10 @@ runs:
   using: "composite"
   steps:
     - id: microceph-config
-      run: microceph.sh -c ${{ inputs.channel }} -d ${{ inputs.devname }} -a ${{ inputs.accesskey }} -s ${{ inputs.secretkey }} -b ${{ inputs.bucket }} -z ${{ inputs.osdsize }}
+      run: ${{github.action_path}}/microceph.sh -c ${{ inputs.channel }} -d ${{ inputs.devname }} -a ${{ inputs.accesskey }} -s ${{ inputs.secretkey }} -b ${{ inputs.bucket }} -z ${{ inputs.osdsize }}
       shell: bash
     - id: https-setup
-      run: https.sh
+      run: ${{github.action_path}}/https.sh
       shell: bash
     - id: microceph-output
       run: echo "s3-config-file=$(pwd)/microceph.source" >> $GITHUB_OUTPUT
