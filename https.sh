@@ -1,13 +1,21 @@
 #!/usr/bin/bash
 
-set -e
+set -eux
+
+usage() { echo "Usage: $0 ${FULL_PATH_TO haproxy.cfg.template}" 1>&2; exit 1; }
+
+# We expect only one path: the haproxy.cfg.template full path
+if [ $# -ne 1 ]; then
+    usage
+fi
 
 sudo apt install -qq -y haproxy
 
 IP="$(hostname -I | awk '{print $1}')"
 CA="/etc/ssl/microceph.crt"
 
-cat haproxy.cfg.template > haproxy.cfg
+# The first option is the haproxy.cfg.template
+cat "$1" > haproxy.cfg
 echo "      server http_server1 ${IP}:80" >> haproxy.cfg
 sudo rm /etc/haproxy/haproxy.cfg
 sudo mv haproxy.cfg /etc/haproxy/haproxy.cfg
