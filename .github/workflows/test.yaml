@@ -46,13 +46,13 @@ jobs:
                 --access_key="${S3_ACCESS_KEY}" \
                 --ca-cert="${S3_CA_BUNDLE_PATH}" \
                 --secret_key="${S3_SECRET_KEY}" \
-                put testing "${S3_BUCKET}"/testing
+                put testing "s3://${S3_BUCKET}"/testing
           s3cmd --no-check-certificate --host "${S3_SERVER_URL}" \
                 --host-bucket="${S3_SERVER_URL}/%(bucket)" \
                 --access_key="${S3_ACCESS_KEY}" \
                 --ca-cert="${S3_CA_BUNDLE_PATH}" \
                 --secret_key="${S3_SECRET_KEY}" \
-                get "${S3_BUCKET}"/testing result-testing
+                get "s3://${S3_BUCKET}"/testing result-testing
           if [[ "${INPUT}" != "$(md5sum result-testing | awk '{print $1}')" ]]; then
               exit 1
           fi
