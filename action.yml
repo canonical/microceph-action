@@ -35,7 +35,7 @@ runs:
   using: "composite"
   steps:
     - id: microceph-config
-      run: microceph.sh -c ${{ inputs.channel }} -d ${{ inputs.devname }} -a ${{ inputs.accesskey }} -s ${{ inputs.secretkey }} -b ${{ inputs.bucket }} -z {{ inputs.osdsize }}
+      run: microceph.sh -c ${{ inputs.channel }} -d ${{ inputs.devname }} -a ${{ inputs.accesskey }} -s ${{ inputs.secretkey }} -b ${{ inputs.bucket }} -z ${{ inputs.osdsize }}
       shell: bash
     - id: https-setup
       run: https.sh
