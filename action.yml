@@ -15,7 +15,10 @@ inputs:
     default: 'secret_key'
   bucket:
     description: 'Microceph bucket path'
-    default: 's3://testbucket'
+    default: 'testbucket'
+  osdsize:
+    description: 'Size of each disk in Ceph (OSD)'
+    default: '5G'
 outputs:
   s3config:
     description: |
@@ -32,10 +35,10 @@ runs:
   using: "composite"
   steps:
     - id: microceph-config
-      run: ./microceph.sh -c ${{ inputs.channel }} -d ${{ inputs.devname }} -a ${{ inputs.accesskey }} -s ${{ inputs.secretkey }} -b ${{ inputs.bucket }} -z {{ inputs.osdsize }}
+      run: microceph.sh -c ${{ inputs.channel }} -d ${{ inputs.devname }} -a ${{ inputs.accesskey }} -s ${{ inputs.secretkey }} -b ${{ inputs.bucket }} -z {{ inputs.osdsize }}
       shell: bash
     - id: https-setup
-      run: ./https.sh
+      run: https.sh
       shell: bash
     - id: microceph-output
       run: echo "s3-config-file=$(pwd)/microceph.source" >> $GITHUB_OUTPUT
