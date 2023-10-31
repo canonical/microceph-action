@@ -32,8 +32,8 @@ sudo openssl req \
 sudo systemctl restart haproxy
 
 OUTPUT=$(pwd)/microceph.source
-echo "export S3_SERVER_URL=https://${IP}" >> "${OUTPUT}"
-echo "export S3_CA_BUNDLE_PATH=${CA}"     >> "${OUTPUT}"
+echo "S3_SERVER_URL=https://${IP}" >> "${OUTPUT}"
+echo "S3_CA_BUNDLE_PATH=${CA}"     >> "${OUTPUT}"
 
 set +e
 
