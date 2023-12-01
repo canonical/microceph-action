@@ -25,7 +25,7 @@ jobs:
     name: Testing
     steps:
       - name: Microceph setup
-        uses: phvalguima/microceph-action@main
+        uses: canonical/microceph-action@main
         with:
           osdsize: "15G"
       - name: Verify S3 is accessible
