@@ -6,7 +6,7 @@ This action sets a single-node microceph with S3 and self-signed HTTPS support f
 
 ```yaml
       - name: Setup microceph
-        uses: canonical/microceph-action@v0.4
+        uses: canonical/microceph-action@v0.1
         with:
           channel: 'latest/edge'
           devname: '/dev/sdi'
