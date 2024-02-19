@@ -2,10 +2,9 @@
 
 set -eux
 
-usage() { echo "Usage: $0 [-c <snap-channel>] [-d <device-name>] [-a <access-key>] [-s <secret-key>] [-b <bucket-name>] [-z <disk-size>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-c <snap-channel>] [-a <access-key>] [-s <secret-key>] [-b <bucket-name>] [-z <disk-size>]" 1>&2; exit 1; }
 
 CHANNEL=latest/edge
-DEVNAME=/dev/sdi
 ACCESS_KEY=access_key
 SECRET_KEY=secret_key
 BUCKET_NAME=testbucket
@@ -15,9 +14,6 @@ while getopts ":c:d:a:s:b:z:" o; do
     case "${o}" in
         c)
             CHANNEL=${OPTARG}
-            ;;
-        d)
-            DEVNAME=${OPTARG}
             ;;
         a)
             ACCESS_KEY=${OPTARG}
@@ -68,15 +64,7 @@ sleep 30s
 
 # Set mon warn threshold to slightly more than mon_data_avail_crit
 sudo microceph.ceph config set "mon.$(hostname)" mon_data_avail_warn 6
-
-for l in a b c; do
-  loop_file="$(sudo mktemp -p /mnt XXXX.img)"
-  sudo truncate -s "${DISK_SIZE}" "${loop_file}"
-  loop_dev="$(sudo losetup --show -f "${loop_file}")"
-  minor="${loop_dev##/dev/loop}"
-  sudo mknod -m 0660 "${DEVNAME}${l}" b 7 "${minor}"
-  sudo microceph disk add --wipe "${DEVNAME}${l}"
-done
+sudo microceph disk add loop,"${DISK_SIZE}",3
 
 check_ceph_ok_or_exit
 
