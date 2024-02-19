@@ -4,9 +4,6 @@ inputs:
   channel:
     description: 'Microceph snap channel'
     default: 'latest/edge'
-  devname:
-    description: 'Microceph device name'
-    default: '/dev/sdi'
   accesskey:
     description: 'Microceph S3 access key'
     default: 'access_key'
@@ -35,7 +32,7 @@ runs:
   using: "composite"
   steps:
     - id: microceph-config
-      run: ${{github.action_path}}/microceph.sh -c ${{ inputs.channel }} -d ${{ inputs.devname }} -a ${{ inputs.accesskey }} -s ${{ inputs.secretkey }} -b ${{ inputs.bucket }} -z ${{ inputs.osdsize }}
+      run: ${{github.action_path}}/microceph.sh -c ${{ inputs.channel }} -a ${{ inputs.accesskey }} -s ${{ inputs.secretkey }} -b ${{ inputs.bucket }} -z ${{ inputs.osdsize }}
       shell: bash
     - id: https-setup
       run: ${{github.action_path}}/https.sh ${{github.action_path}}/haproxy.cfg.template
