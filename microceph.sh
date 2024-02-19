@@ -2,7 +2,7 @@
 
 set -eux
 
-usage() { echo "Usage: $0 [-c <snap-channel>] [-d <device-name>] [-a <access-key>] [-s <secret-key>] [-b <bucket-name>] [-z <disk-size>]" 1>&2; exit 1; }
+usage() { echo "Usage: $0 [-c <snap-channel>] [-a <access-key>] [-s <secret-key>] [-b <bucket-name>] [-z <disk-size>]" 1>&2; exit 1; }
 
 CHANNEL=latest/edge
 ACCESS_KEY=access_key
